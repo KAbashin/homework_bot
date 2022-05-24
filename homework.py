@@ -38,9 +38,11 @@ logger.info('Бот запущен!')
 
 
 def check_tokens() -> bool:
-    """проверяет доступность переменных окружения, которые необходимы для
+    """
+    проверяет доступность переменных окружения, которые необходимы для
     работы программы. Если отсутствует хотя бы одна переменная окружения —
-    функция должна вернуть False, иначе — True."""
+    функция должна вернуть False, иначе — True.
+    """
     logger.info('Проверка переменных окружения')
     tokens = [PRACTICUM_TOKEN, TELEGRAM_TOKEN, TELEGRAM_CHAT_ID]
     for token in tokens:
@@ -52,7 +54,7 @@ def check_tokens() -> bool:
 
 
 def send_message(bot, message):
-    """отправляет сообщение в Telegram чат"""
+    """ Отправляет сообщение в Telegram чат. """
     try:
         bot.send_message(TELEGRAM_CHAT_ID, message)
         logger.info(f'Отправлено сообщение: "{message}"')
@@ -61,7 +63,7 @@ def send_message(bot, message):
 
 
 def get_api_answer(current_timestamp):
-    """делает запрос к единственному эндпоинту API-сервиса"""
+    """ Делает запрос к единственному эндпоинту API-сервиса. """
     logger.info("Получение ответа от сервера")
     timestamp = current_timestamp or int(time.time())
     params = {'from_date': timestamp}
@@ -86,7 +88,7 @@ def get_api_answer(current_timestamp):
 
 
 def check_response(response):
-    """проверяет ответ API на корректность"""
+    """ Проверяет ответ API на корректность. """
     logger.info("Проверка ответа API на корректность")
     if 'homeworks' not in response:
         raise TypeError('Ошибка: homeworks отсутствует')
@@ -100,8 +102,10 @@ def check_response(response):
 
 
 def parse_status(homework):
-    """извлекает из информации о конкретной домашней работе статус этой
-    работы"""
+    """
+    Извлекает из информации о конкретной домашней работе статус этой
+    работы.
+    """
     logger.info(f'Парсим домашнее задание: {homework}')
     keys_homework = ['status', 'homework_name']
     for key in keys_homework:
@@ -119,7 +123,7 @@ def parse_status(homework):
 
 
 def checking_repeated_messages(message, last_response):
-    """Проверка и блок повторных сообщений"""
+    """ Проверка и блок повторных сообщений. """
     logger.info('Проверка сообщения на повтор')
     if message != last_response:
         last_response = message
@@ -130,7 +134,7 @@ def checking_repeated_messages(message, last_response):
 
 
 def main():
-    """Основная логика работы бота."""
+    """ Основная логика работы бота. """
     if not check_tokens():
         message = 'Проблемы с переменными окружения'
         raise SystemExit(message)
