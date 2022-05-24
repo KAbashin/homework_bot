@@ -38,8 +38,8 @@ logger.info('Бот запущен!')
 
 
 def check_tokens() -> bool:
-    """
-    проверяет доступность переменных окружения, которые необходимы для
+    """.
+    Проверяет доступность переменных окружения, которые необходимы для
     работы программы. Если отсутствует хотя бы одна переменная окружения —
     функция должна вернуть False, иначе — True.
     """
@@ -54,7 +54,7 @@ def check_tokens() -> bool:
 
 
 def send_message(bot, message):
-    """ Отправляет сообщение в Telegram чат. """
+    """Отправляет сообщение в Telegram чат. """
     try:
         bot.send_message(TELEGRAM_CHAT_ID, message)
         logger.info(f'Отправлено сообщение: "{message}"')
@@ -63,7 +63,7 @@ def send_message(bot, message):
 
 
 def get_api_answer(current_timestamp):
-    """ Делает запрос к единственному эндпоинту API-сервиса. """
+    """Делает запрос к единственному эндпоинту API-сервиса. """
     logger.info("Получение ответа от сервера")
     timestamp = current_timestamp or int(time.time())
     params = {'from_date': timestamp}
@@ -88,7 +88,7 @@ def get_api_answer(current_timestamp):
 
 
 def check_response(response):
-    """ Проверяет ответ API на корректность. """
+    """Проверяет ответ API на корректность. """
     logger.info("Проверка ответа API на корректность")
     if 'homeworks' not in response:
         raise TypeError('Ошибка: homeworks отсутствует')
@@ -102,7 +102,7 @@ def check_response(response):
 
 
 def parse_status(homework):
-    """
+    """.
     Извлекает из информации о конкретной домашней работе статус этой
     работы.
     """
@@ -123,7 +123,7 @@ def parse_status(homework):
 
 
 def checking_repeated_messages(message, last_response):
-    """ Проверка и блок повторных сообщений. """
+    """Проверка и блок повторных сообщений. """
     logger.info('Проверка сообщения на повтор')
     if message != last_response:
         last_response = message
@@ -134,7 +134,7 @@ def checking_repeated_messages(message, last_response):
 
 
 def main():
-    """ Основная логика работы бота. """
+    """Основная логика работы бота. """
     if not check_tokens():
         message = 'Проблемы с переменными окружения'
         raise SystemExit(message)
