@@ -45,12 +45,12 @@ def check_tokens() -> bool:
     """
     logger.info('Проверка переменных окружения')
     tokens = [PRACTICUM_TOKEN, TELEGRAM_TOKEN, TELEGRAM_CHAT_ID]
-    for token in tokens:
-        if token is None:
-            message = f'Нет переменной окружения - {token}!'
-            logger.critical(message)
-            return False
-    return True
+    if all(tokens):
+        return True
+    else:
+        message = f'Нет переменной окружения - {tokens}!'
+        logger.critical(message)
+        return False
 
 
 def send_message(bot, message):
@@ -74,16 +74,11 @@ def get_api_answer(current_timestamp):
         message = 'Нет ожидаемого ответа сервера от API'
         logger.error(message)
         raise exceptions.APIAnswerError(message)
-    try:
-        if response.status_code != HTTPStatus.OK:
-            message = (f'Эндпоинт {ENDPOINT} не отвечает, ',
-                       f'http status: {response.status_code}')
-            logger.error(message)
-            raise Exception(message)
-    except Exception:
-        message = 'Нет ожидаемого ответа сервера от API'
+    if response.status_code != HTTPStatus.OK:
+        message = (f'Эндпоинт {ENDPOINT} не отвечает, ',
+                   f'http status: {response.status_code}')
         logger.error(message)
-        raise exceptions.APIAnswerError(message)
+        raise Exception(message)
     return response.json()
 
 
@@ -136,7 +131,7 @@ def checking_repeated_messages(message, last_response):
 def main():
     """Основная логика работы бота."""
     if not check_tokens():
-        message = 'Проблемы с переменными окружения'
+        message = 'Завершение работы. Проблемы с переменными окружения'
         raise SystemExit(message)
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
     current_timestamp = int(time.time())
@@ -151,7 +146,6 @@ def main():
                 if check_msg is not None:
                     last_response = check_msg
                     send_message(bot, message)
-            time.sleep(RETRY_TIME)
         except Exception as error:
             message = f'Ошибка в работе программы: {error}'
             logger.error(message)
@@ -159,6 +153,7 @@ def main():
             if check_msg is not None:
                 last_response = check_msg
                 send_message(bot, message)
+        finally:
             time.sleep(RETRY_TIME)
 
 
