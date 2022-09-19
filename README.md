@@ -4,3 +4,5 @@ Telegram-бот обращаться к API сервиса Практикум.Д
 работы. 
 
 Стек: Python 3.7, python-telegram-bot
+
+Автор: Abashin Konstantin E-mail: kabashin@mail.ru
